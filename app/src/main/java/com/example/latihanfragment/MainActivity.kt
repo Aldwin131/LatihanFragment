@@ -1,4 +1,5 @@
 package com.example.latihanfragment
+
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
             val hasil = angka1 * angka2
             historyKali.add("$angka1 * $angka2 = $hasil")
-            bukaFragment(FragmentKali(), historyKali)
+            bukaFragment(FragmentKali(), historyKali, hasil)
         }
 
         btnBagi.setOnClickListener {
@@ -54,10 +55,14 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Masukkan kedua angka", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            if (angka2 == 0.0) {
+                Toast.makeText(this, "Tidak bisa membagi dengan 0", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             val hasil = angka1 / angka2
             historyBagi.add("$angka1 / $angka2 = $hasil")
-            bukaFragment(FragmentBagi(), historyBagi)
+            bukaFragment(FragmentBagi(), historyBagi, hasil)
         }
 
         btnTambah.setOnClickListener {
@@ -70,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
             val hasil = angka1 + angka2
             historyTambah.add("$angka1 + $angka2 = $hasil")
-            bukaFragment(FragmentTambah(), historyTambah)
+            bukaFragment(FragmentTambah(), historyTambah, hasil)
         }
 
         btnKurang.setOnClickListener {
@@ -83,13 +88,14 @@ class MainActivity : AppCompatActivity() {
 
             val hasil = angka1 - angka2
             historyKurang.add("$angka1 - $angka2 = $hasil")
-            bukaFragment(FragmentKurang(), historyKurang)
+            bukaFragment(FragmentKurang(), historyKurang, hasil)
         }
     }
 
-    private fun bukaFragment(fragment: Fragment, daftarHistory: List<String>) {
+    private fun bukaFragment(fragment: Fragment, daftarHistory: List<String>, hasil: Double) {
         val bundle = Bundle().apply {
             putString("HISTORY", daftarHistory.joinToString("\n"))
+            putBoolean("IS_NEGATIF", hasil < 0)
         }
         fragment.arguments = bundle
 
